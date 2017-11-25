@@ -24,6 +24,7 @@ public class Ejercicio1Activity extends AppCompatActivity implements View.OnClic
     EditText edtIntroduceNombre, edtIntroduceTelefono, edtIntroduceCorreo;
     TextView txvMisContactos;
     static final String NOMBREFICHERO = "agenda.txt";
+    Memoria miMemoria;
     File miFichero;
 
     @Override
@@ -46,7 +47,10 @@ public class Ejercicio1Activity extends AppCompatActivity implements View.OnClic
         edtIntroduceTelefono = findViewById(R.id.edtIntroduceTelefono);
         edtIntroduceCorreo = findViewById(R.id.edtIntroduceCorreo);
 
+        miMemoria = new Memoria(getApplicationContext());
+
         miFichero = new File(getApplicationContext().getFilesDir(), NOMBREFICHERO);
+
     }
 
 
@@ -58,7 +62,7 @@ public class Ejercicio1Activity extends AppCompatActivity implements View.OnClic
 
             if (edtIntroduceNombre.getText().toString().length() > 0 && edtIntroduceTelefono.getText().toString().length() > 0 && edtIntroduceCorreo.getText().toString().length()> 0){
             texto = edtIntroduceNombre.getText().toString() + "," + edtIntroduceTelefono.getText().toString() + "," + edtIntroduceCorreo.getText().toString();
-            guardarContacto(texto);
+            miMemoria.escribirInterna(NOMBREFICHERO, texto, true, "UTF-8");
             }
 
             else{
@@ -74,43 +78,11 @@ public class Ejercicio1Activity extends AppCompatActivity implements View.OnClic
         }
     }
 
-    public void guardarContacto(String texto) {
 
-        FileOutputStream fos;
-        OutputStreamWriter osw;
-        BufferedWriter bw;
 
-        try {
-
-            if (miFichero.exists() == false) {
-                miFichero.createNewFile();
-            }
-
-            fos = new FileOutputStream(miFichero, true);
-            osw = new OutputStreamWriter(fos);
-            bw = new BufferedWriter(osw);
-
-            bw.write(texto);
-            bw.newLine();
-            Toast.makeText(this, "Contacto guardado", Toast.LENGTH_SHORT).show();
-
-            bw.close();
-            osw.close();
-            fos.close();
-        }
-
-        catch (FileNotFoundException e){
-            Toast.makeText(this, "Fichero no encontrado", Toast.LENGTH_SHORT).show();
-        }
-        catch (IOException e) {
-            Toast.makeText(this, "Error de E/S", Toast.LENGTH_SHORT).show();
-        }
-        catch (Exception e){
-            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
 
     public void listarContactos(){
+
         FileInputStream fis;
         InputStreamReader isr;
         BufferedReader br;
