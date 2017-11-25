@@ -62,7 +62,9 @@ public class Ejercicio1Activity extends AppCompatActivity implements View.OnClic
 
             if (edtIntroduceNombre.getText().toString().length() > 0 && edtIntroduceTelefono.getText().toString().length() > 0 && edtIntroduceCorreo.getText().toString().length()> 0){
             texto = edtIntroduceNombre.getText().toString() + "," + edtIntroduceTelefono.getText().toString() + "," + edtIntroduceCorreo.getText().toString();
-            miMemoria.escribirInterna(NOMBREFICHERO, texto, true, "UTF-8");
+                if(miMemoria.escribirInterna(NOMBREFICHERO, texto, true, "UTF-8")){
+                    Toast.makeText(this, "Contacto guardado", Toast.LENGTH_SHORT).show();
+                }
             }
 
             else{
@@ -77,9 +79,6 @@ public class Ejercicio1Activity extends AppCompatActivity implements View.OnClic
             borrarAgenda();
         }
     }
-
-
-
 
     public void listarContactos(){
 
