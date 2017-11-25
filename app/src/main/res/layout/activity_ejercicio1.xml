@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.usuario.ejerciciosdered.Ejercicio1Activity"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/txvTituloEjercicio1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="AGENDA"
+        android:textSize="50dp"
+        android:layout_gravity="center"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/txvIntroduceNombre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nombre" />
+    <EditText
+        android:id="@+id/edtIntroduceNombre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+    <TextView
+        android:id="@+id/txvIntroduceTelefono"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Teléfono" />
+    <EditText
+        android:id="@+id/edtIntroduceTelefono"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+    <TextView
+        android:id="@+id/txvIntroduceCorreo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Correo" />
+    <EditText
+        android:id="@+id/edtIntroduceCorreo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/btnGuardarContacto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Guardar" />
+
+        <Button
+            android:id="@+id/btnListarContacto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Listar" />
+
+        <Button
+            android:id="@+id/btnBorrarContactos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Borrar" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/txvMisContactos"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"/>
+    </ScrollView>
+
+
+
+</LinearLayout>
