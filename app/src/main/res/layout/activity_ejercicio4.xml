@@ -71,8 +71,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
-
-
     <WebView
         android:id="@+id/wbvMostrar"
         android:layout_width="match_parent"

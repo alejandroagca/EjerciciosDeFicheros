@@ -1,9 +1,5 @@
 package com.example.usuario.ejerciciosdered;
 
-/**
- * Created by usuario on 25/11/17.
- */
-
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
@@ -16,10 +12,6 @@ import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
-/**
- * Created by usuario on 17/10/17.
- */
 
 public class Memoria {
 
@@ -87,6 +79,7 @@ public class Memoria {
     }
 
     public boolean escribirExterna(String fichero, String cadena, Boolean anadir, String codigo) {
+
         File miFichero, tarjeta;
         tarjeta = Environment.getExternalStorageDirectory();
         miFichero = new File(
