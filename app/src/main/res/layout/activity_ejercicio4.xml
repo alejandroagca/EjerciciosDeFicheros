@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.usuario.ejerciciosdered.Ejercicio4Activity">
+
+    <TextView
+        android:id="@+id/txvIntroducir"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Introduzca una URL" />
+
+    <EditText
+        android:id="@+id/edtURL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="http://www.marca.com" />
+
+    <RadioGroup
+        android:id="@+id/rdgConexion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rdbJava"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="Java.net" />
+
+        <RadioButton
+            android:id="@+id/rdbAAHC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="AAHC" />
+
+        <RadioButton
+            android:id="@+id/rdbVolley"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Volley" />
+
+        <Button
+            android:id="@+id/btnConectar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CONECTAR" />
+
+    </RadioGroup>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btnDescargar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DESCARGAR" />
+
+        <EditText
+            android:id="@+id/edtRutaDescarga"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+
+    <WebView
+        android:id="@+id/wbvMostrar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </WebView>
+
+
+
+</LinearLayout>

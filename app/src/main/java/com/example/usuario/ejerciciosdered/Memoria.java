@@ -89,8 +89,6 @@ public class Memoria {
     public boolean escribirExterna(String fichero, String cadena, Boolean anadir, String codigo) {
         File miFichero, tarjeta;
         tarjeta = Environment.getExternalStorageDirectory();
-        //tarjeta = Environment.getExternalStoragePublicDirectory("datos/programas/");
-        //tarjeta.mkdirs();
         miFichero = new File(
                 tarjeta.getAbsolutePath(), fichero);
         return escribir(miFichero, cadena, anadir, codigo);
