@@ -19,11 +19,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Tiempo" />
+
     <EditText
         android:id="@+id/edtIntroduceTiempo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        android:inputType="number" />
 
     <TextView
         android:layout_width="match_parent"
@@ -54,9 +55,20 @@
         android:layout_height="wrap_content"
         android:text="Borrar alarmas"/>
 
-    <TextView
-        android:id="@+id/txvVerAlarmas"
+    <Button
+        android:id="@+id/btnVerAlarmas"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:text="Ver alarmas"/>
+
+
+        <TextView
+            android:id="@+id/txvVerMensaje"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+
+
 
 </LinearLayout>

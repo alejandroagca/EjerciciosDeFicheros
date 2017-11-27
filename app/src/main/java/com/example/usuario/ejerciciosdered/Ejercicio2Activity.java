@@ -20,18 +20,25 @@ import java.io.InputStreamReader;
 
 public class Ejercicio2Activity extends AppCompatActivity implements View.OnClickListener {
 
-    Button btnLanzarAlarmas, btnGuardarAlarma, btnBorrarAlarmas;
+    Button btnLanzarAlarmas, btnGuardarAlarma, btnBorrarAlarmas, btnVerAlarmas;
     EditText edtIntroduceTiempo, edtIntroduceMensaje;
     Memoria miMemoria;
     File miFichero;
-    TextView txvVerAlarmas;
+    TextView txvVerMensaje;
     MediaPlayer mp;
-    public static int cuantasAlarmas;
+    MiContador temporizador;
+    int cuantasAlarmas;
+    String [] mensajesAlarmas;
+    int [] tiemposAlarmas;
+    int turno;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ejercicio2);
         cuantasAlarmas = 0;
+        mensajesAlarmas = new String[5];
+        tiemposAlarmas = new int[5];
+        turno = 0;
         mp = MediaPlayer.create(this,R.raw.sonido);
         btnGuardarAlarma = findViewById(R.id.btnGuardarAlarma);
         btnGuardarAlarma.setOnClickListener(this);
@@ -39,7 +46,9 @@ public class Ejercicio2Activity extends AppCompatActivity implements View.OnClic
         btnLanzarAlarmas.setOnClickListener(this);
         btnBorrarAlarmas = findViewById(R.id.btnBorrarAlarmas);
         btnBorrarAlarmas.setOnClickListener(this);
-        txvVerAlarmas = findViewById(R.id.txvVerAlarmas);
+        btnVerAlarmas = findViewById(R.id.btnVerAlarmas);
+        btnVerAlarmas.setOnClickListener(this);
+        txvVerMensaje = findViewById(R.id.txvVerMensaje);
         edtIntroduceMensaje = findViewById(R.id.edtIntroduceMensaje);
         edtIntroduceTiempo = findViewById(R.id.edtIntroduceTiempo);
         miMemoria = new Memoria(getApplicationContext());
@@ -57,36 +66,51 @@ public class Ejercicio2Activity extends AppCompatActivity implements View.OnClic
         }
 
         if (v == btnLanzarAlarmas){
+            lanzarAlarmas();
         }
 
         if (v == btnBorrarAlarmas){
             borrarAlarmas();
         }
+
+        if (v == btnVerAlarmas){
+            verAlarmas();
+        }
     }
 
     private void borrarAlarmas(){
+        comprobarAlarmas();
         if (miFichero.exists()) {
             miFichero.delete();
             cuantasAlarmas = 0;
-            txvVerAlarmas.setText("");
+            txvVerMensaje.setText("");
             Toast.makeText(Ejercicio2Activity.this, "Se ha borrado el fichero alarmas.txt", Toast.LENGTH_SHORT).show();
-        }
-        else{
-            Toast.makeText(Ejercicio2Activity.this, "El fichero alarmas.txt no se ha creado todavia", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void guardarAlarma(){
         if(miMemoria.disponibleEscritura()) {
             if (cuantasAlarmas <5) {
-                String alarma = edtIntroduceTiempo.getText().toString() + "," + edtIntroduceMensaje.getText().toString();
+                if (edtIntroduceTiempo.getText().toString().length() > 0 && edtIntroduceMensaje.getText().toString().length() > 0){
+                    String alarma = edtIntroduceTiempo.getText().toString() + "," + edtIntroduceMensaje.getText().toString();
                 miMemoria.escribirExterna("alarmas.txt", alarma, true, "UTF-8");
                 comprobarAlarmas();
                 Toast.makeText(Ejercicio2Activity.this, "Alarma guardada", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(Ejercicio2Activity.this, "Alguno de los campos no ha sido rellenado", Toast.LENGTH_SHORT).show();
+                }
             }
             else {
-                Toast.makeText(Ejercicio2Activity.this, "Ya tienes 4 alarmas creadas", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Ejercicio2Activity.this, "Ya tienes 5 alarmas creadas", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    private void verAlarmas(){
+        comprobarAlarmas();
+        txvVerMensaje.setText("");
+        for (int i = 0; i < cuantasAlarmas; i++){
+            txvVerMensaje.setText(txvVerMensaje.getText().toString() + "Alarma: " + mensajesAlarmas[i] + "\t   Tiempo: " + tiemposAlarmas[i]  + "\n");
         }
     }
 
@@ -96,16 +120,17 @@ public class Ejercicio2Activity extends AppCompatActivity implements View.OnClic
         InputStreamReader isr;
         BufferedReader br;
         String linea;
+        String [] estaAlarma;
 
         try {
             fis = new FileInputStream(miFichero);
             isr = new InputStreamReader(fis);
             br = new BufferedReader(isr);
 
-            txvVerAlarmas.setText("");
             while ((linea = br.readLine())!= null) {
-                cuantasAlarmas++;
-                txvVerAlarmas.setText(txvVerAlarmas.getText().toString() + linea + "\n");
+                estaAlarma = linea.split(",");
+                tiemposAlarmas[cuantasAlarmas] = Integer.parseInt(estaAlarma[0]);
+                mensajesAlarmas[cuantasAlarmas++] = estaAlarma[1];
             }
 
             br.close();
@@ -121,14 +146,29 @@ public class Ejercicio2Activity extends AppCompatActivity implements View.OnClic
         }
     }
 
+    private void lanzarAlarmas(){
+        turno = 0;
+        comprobarAlarmas();
+            if (cuantasAlarmas > 0) {
+                temporizador = new MiContador((long) tiemposAlarmas[turno] * 60 * 1000, (long) 1000.0);
+                temporizador.start();
+                btnVerAlarmas.setEnabled(false);
+                btnBorrarAlarmas.setEnabled(false);
+                btnLanzarAlarmas.setEnabled(false);
+                btnGuardarAlarma.setEnabled(false);
+
+            }
+
+    }
+
     public class MiContador extends CountDownTimer {
         public MiContador(long startTime, long interval) {
             super(startTime, interval);
+            txvVerMensaje.setText("La alarma " + mensajesAlarmas[turno] + " sonará en " + tiemposAlarmas[turno] + " minuto/s");
         }
 
         @Override
         public void onTick(long millisUntilFinished) {
-            long minutos = (millisUntilFinished/1000) / 60;
 
         }
 
@@ -136,7 +176,18 @@ public class Ejercicio2Activity extends AppCompatActivity implements View.OnClic
         public void onFinish()
         {
             mp.start();
-
+            turno++;
+            if (turno < cuantasAlarmas) {
+                temporizador = new MiContador((long) tiemposAlarmas[turno] * 60 * 1000, (long) 1000.0);
+                temporizador.start();
+            }
+            else{
+                txvVerMensaje.setText("Todas las alarmas han finalizado");
+                btnVerAlarmas.setEnabled(true);
+                btnBorrarAlarmas.setEnabled(true);
+                btnLanzarAlarmas.setEnabled(true);
+                btnGuardarAlarma.setEnabled(true);
+            }
 
         }
     }
