@@ -164,12 +164,13 @@ public class Ejercicio2Activity extends AppCompatActivity implements View.OnClic
     public class MiContador extends CountDownTimer {
         public MiContador(long startTime, long interval) {
             super(startTime, interval);
-            txvVerMensaje.setText("La alarma " + mensajesAlarmas[turno] + " sonará en " + tiemposAlarmas[turno] + " minuto/s");
         }
 
         @Override
         public void onTick(long millisUntilFinished) {
-
+            long minutos = (millisUntilFinished/1000) / 60;
+            long segundos = (millisUntilFinished/1000) % 60;
+            txvVerMensaje.setText("La alarma " + mensajesAlarmas[turno] + " sonará en " + minutos + ":" + segundos );
         }
 
         @Override
