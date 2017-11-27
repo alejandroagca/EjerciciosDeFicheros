@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="http://alumno.mobi/~alumno/superior/cruz/enlaces.txt" />
+            android:text="http://alumno.mobi/~alumno/superior/aguilar/enlaces.txt"/>
 
         <Button
             android:id="@+id/btnDescargarImagenes"

@@ -44,7 +44,7 @@ public class Ejercicio6Activity extends AppCompatActivity implements View.OnClic
         convertir = (Button) findViewById(R.id.buttonConvertir);
         convertir.setOnClickListener(this);
         txvResultadoDeCambio = findViewById(R.id.txvResultadoDeCambio);
-        descargaFichero("http://alumno.mobi/~alumno/superior/benitez/cambio.txt");
+        descargaFichero("http://alumno.mobi/~alumno/superior/aguilar/cambio.txt");
     }
 
     public double Convertir(double cantidad)
