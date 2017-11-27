@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.usuario.ejerciciosdered.Ejercicio1Activity"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ALARMAS"
+        android:textSize="50dp"
+        android:layout_gravity="center"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tiempo" />
+    <EditText
+        android:id="@+id/edtIntroduceTiempo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mensaje" />
+    <EditText
+        android:id="@+id/edtIntroduceMensaje"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+        <Button
+            android:id="@+id/btnGuardarAlarma"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Guardar alarma" />
+
+
+    <Button
+        android:id="@+id/btnLanzarAlarmas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lanzar alarmas"/>
+
+    <Button
+        android:id="@+id/btnBorrarAlarmas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Borrar alarmas"/>
+
+    <TextView
+        android:id="@+id/txvVerAlarmas"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

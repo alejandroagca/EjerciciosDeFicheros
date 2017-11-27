@@ -43,6 +43,11 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(i);
         }
 
+        if (v == btnEjercicio2){
+            i = new Intent(this, Ejercicio2Activity.class);
+            startActivity(i);
+        }
+
         if (v == btnEjercicio4){
             i = new Intent(this, Ejercicio4Activity.class);
             startActivity(i);

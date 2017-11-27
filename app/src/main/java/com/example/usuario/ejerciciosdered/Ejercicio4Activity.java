@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,7 +14,6 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -77,7 +75,6 @@ public class Ejercicio4Activity extends AppCompatActivity implements View.OnClic
                     volley(url);
                 }
             }
-
 
             if (v == btnDescargar) {
                 if(edtRutaDescarga.getText().toString().length() > 0) {
