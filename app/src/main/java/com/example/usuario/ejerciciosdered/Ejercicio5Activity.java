@@ -34,6 +34,7 @@ public class Ejercicio5Activity extends AppCompatActivity  implements  View.OnCl
     List<String> rutasAImagenes;
     int numeroDeImagenes;
     int imagenSeleccionada;
+    boolean imagenesCargadasConExito;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,7 @@ public class Ejercicio5Activity extends AppCompatActivity  implements  View.OnCl
         setContentView(R.layout.activity_ejercicio5);
         numeroDeImagenes = 0;
         imagenSeleccionada = 0;
+        imagenesCargadasConExito = false;
         btnDescargarImagenes = findViewById(R.id.btnDescargarImagenes);
         btnDescargarImagenes.setOnClickListener(this);
         btnImagenAnterior = findViewById(R.id.btnImagenAnterior);
@@ -49,7 +51,6 @@ public class Ejercicio5Activity extends AppCompatActivity  implements  View.OnCl
         btnImagenSiguiente.setOnClickListener(this);
         imgEstablecerImagen = findViewById(R.id.imgEstablecerImagen);
         edtRutaAlFichero = findViewById(R.id.edtRutaAlFichero);
-        rutasAImagenes = new ArrayList<String>();
 
     }
 
@@ -82,57 +83,66 @@ public class Ejercicio5Activity extends AppCompatActivity  implements  View.OnCl
     }
     private void descargaFichero(String url)
     {
+
+        rutasAImagenes = new ArrayList<String>();
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(url, new FileAsyncHttpResponseHandler(/* Context */ this) {
-            ProgressDialog pd;
-            @Override
-            public void onStart() {
-                pd = new ProgressDialog(Ejercicio5Activity.this);
-                pd.setTitle("Por favor espere...");
-                pd.setMessage("AsyncHttpResponseHadler está en progreso");
-                pd.setIndeterminate(false);
-                pd.setCancelable(false);
-                pd.show();
-                Toast.makeText(Ejercicio5Activity.this, "Descargando...", Toast.LENGTH_SHORT).show();
-            }
+        ProgressDialog pd;
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
-                Toast.makeText(Ejercicio5Activity.this, "Se ha producido un error", Toast.LENGTH_SHORT).show();
-            }
+                @Override
+                public void onStart() {
 
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, File file) {
-                Toast.makeText(Ejercicio5Activity.this, "El fichero se ha descargado con exito", Toast.LENGTH_SHORT).show();
-                FileInputStream fis;
-                try {
-                    fis = new FileInputStream(file);
-                    BufferedReader in = new BufferedReader(new InputStreamReader(fis));
-
-                    String linea;
-                    while ((linea = in.readLine()) != null) {
-                        numeroDeImagenes++;
-                        rutasAImagenes.add(linea);
-                    }
-                    in.close();
-                    fis.close();
-
-
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    pd = new ProgressDialog(Ejercicio5Activity.this);
+                    pd.setTitle("Por favor espere...");
+                    pd.setMessage("AsyncHttpResponseHadler está en progreso");
+                    pd.setIndeterminate(false);
+                    pd.setCancelable(false);
+                    pd.show();
+                    Toast.makeText(Ejercicio5Activity.this, "Descargando...", Toast.LENGTH_SHORT).show();
                 }
-            }
 
-            @Override
-            public void onFinish() {
-                pd.dismiss();
-                establecerImagen(rutasAImagenes.get(imagenSeleccionada));
-            }
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
+                    Toast.makeText(Ejercicio5Activity.this, "Se ha producido un error", Toast.LENGTH_SHORT).show();
+                    imagenesCargadasConExito = false;
+                }
 
-        });
-    }
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, File file) {
+                    Toast.makeText(Ejercicio5Activity.this, "Las rutas a las imagenes se han descargado con exito", Toast.LENGTH_SHORT).show();
+                    FileInputStream fis;
+                    try {
+                        fis = new FileInputStream(file);
+                        BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+
+                        String linea;
+                        while ((linea = in.readLine()) != null) {
+                            numeroDeImagenes++;
+                            rutasAImagenes.add(linea);
+                        }
+                        in.close();
+                        fis.close();
+                        imagenesCargadasConExito = true;
+
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFinish() {
+                    pd.dismiss();
+                    if (imagenesCargadasConExito){
+                        establecerImagen(rutasAImagenes.get(imagenSeleccionada));
+                    }
+                }
+
+            });
+        }
+
 
     private void pasarImagen(){
         if (imagenSeleccionada + 1 < numeroDeImagenes) {
