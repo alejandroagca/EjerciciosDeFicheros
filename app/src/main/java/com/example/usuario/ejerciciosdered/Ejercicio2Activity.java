@@ -84,7 +84,7 @@ public class Ejercicio2Activity extends AppCompatActivity implements View.OnClic
             miFichero.delete();
             cuantasAlarmas = 0;
             txvVerMensaje.setText("");
-            Toast.makeText(Ejercicio2Activity.this, "Se ha borrado el fichero alarmas.txt", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Ejercicio2Activity.this, "Se han borrado todas las alarmas", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -138,7 +138,7 @@ public class Ejercicio2Activity extends AppCompatActivity implements View.OnClic
             fis.close();
 
         } catch (FileNotFoundException e){
-            Toast.makeText(Ejercicio2Activity.this, "El fichero alarmas.txt no se ha creado todavia", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Ejercicio2Activity.this, "No hay ninguna alarma creada", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             Toast.makeText(Ejercicio2Activity.this, "Error de E/S.", Toast.LENGTH_SHORT).show();
         } catch (Exception e){

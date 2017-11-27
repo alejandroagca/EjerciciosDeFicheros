@@ -60,14 +60,25 @@ public class Ejercicio5Activity extends AppCompatActivity  implements  View.OnCl
             descargaFichero(edtRutaAlFichero.getText().toString());
         }
 
-        if (v == btnImagenAnterior){
-            retrocederImagen();
+
+            if (v == btnImagenAnterior) {
+                if(imagenesCargadasConExito)
+                retrocederImagen();
+                else
+                    Toast.makeText(Ejercicio5Activity.this, "No hay imagenes que cargar", Toast.LENGTH_SHORT).show();
+            }
+
+            if (v == btnImagenSiguiente) {
+            if(imagenesCargadasConExito) {
+                pasarImagen();
+            }
+                else {
+                Toast.makeText(Ejercicio5Activity.this, "No hay imagenes que cargar", Toast.LENGTH_SHORT).show();
+            }
+            }
         }
 
-        if (v == btnImagenSiguiente){
-            pasarImagen();
-        }
-    }
+
 
     private void establecerImagen(String ruta) {
         OkHttpClient client = new OkHttpClient();
@@ -93,25 +104,28 @@ public class Ejercicio5Activity extends AppCompatActivity  implements  View.OnCl
                 @Override
                 public void onStart() {
 
+                    imagenSeleccionada = 0;
+                    numeroDeImagenes = 0;
                     pd = new ProgressDialog(Ejercicio5Activity.this);
                     pd.setTitle("Por favor espere...");
                     pd.setMessage("AsyncHttpResponseHadler está en progreso");
                     pd.setIndeterminate(false);
                     pd.setCancelable(false);
                     pd.show();
-                    Toast.makeText(Ejercicio5Activity.this, "Descargando...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Ejercicio5Activity.this, "Descargando fichero con las rutas de las imagenes...", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
-                    Toast.makeText(Ejercicio5Activity.this, "Se ha producido un error", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Ejercicio5Activity.this, "Se ha producido un error en la descarga del fichero", Toast.LENGTH_SHORT).show();
                     imagenesCargadasConExito = false;
+                    imgEstablecerImagen.setImageResource(R.drawable.error);
                 }
 
 
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, File file) {
-                    Toast.makeText(Ejercicio5Activity.this, "Las rutas a las imagenes se han descargado con exito", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Ejercicio5Activity.this, "El fichero con las rutas a las imagenes se han descargado con exito", Toast.LENGTH_SHORT).show();
                     FileInputStream fis;
                     try {
                         fis = new FileInputStream(file);
