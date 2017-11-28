@@ -34,6 +34,7 @@ public class Ejercicio3Activity extends AppCompatActivity implements View.OnClic
     ArrayList<Date> diasFestivos;
     Memoria miMemoria;
     File miFichero;
+    SimpleDateFormat formato;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +43,9 @@ public class Ejercicio3Activity extends AppCompatActivity implements View.OnClic
         diasFestivos = new ArrayList<Date>();
         diasSeleccionados = new ArrayList<Date>();
         diasComprendidos = new ArrayList<Date>();
+
+        formato = new SimpleDateFormat("dd-MM-yyyy");
+
 
         miFichero = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),  "diasLectivos.txt");
         miFichero.delete();
@@ -123,7 +127,6 @@ public class Ejercicio3Activity extends AppCompatActivity implements View.OnClic
 
     public void esLectivo() {
 
-        SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
 
         boolean festivo;
         Calendar diaDeLaSemana = Calendar.getInstance();
@@ -159,7 +162,6 @@ public class Ejercicio3Activity extends AppCompatActivity implements View.OnClic
     }
 
     public void guardarEnExterna(Date fecha){
-        SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
         String laFecha = formato.format(fecha);
 
             if(miMemoria.disponibleEscritura()) {
@@ -173,7 +175,6 @@ public class Ejercicio3Activity extends AppCompatActivity implements View.OnClic
 
 
     public void anadirDiasFestivos(){
-        SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
 
         try{
             diasFestivos.add(formato.parse("12-10-2017"));
