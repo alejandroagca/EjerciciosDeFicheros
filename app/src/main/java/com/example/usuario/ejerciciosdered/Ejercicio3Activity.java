@@ -46,10 +46,6 @@ public class Ejercicio3Activity extends AppCompatActivity implements View.OnClic
 
         formato = new SimpleDateFormat("dd-MM-yyyy");
 
-
-        miFichero = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),  "diasLectivos.txt");
-        miFichero.delete();
-
         anadirDiasFestivos();
 
         btnCalcularDiasLectivos = findViewById(R.id.btnCalcularDiasLectivos);
@@ -86,17 +82,20 @@ public class Ejercicio3Activity extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         if (v == btnCalcularDiasLectivos) {
             if (diasSeleccionados.size() == 2) {
-                miFichero.delete();
-                mcvCalendario.clearSelection();
-                if (diasSeleccionados.get(0).before(diasSeleccionados.get(1))) {
-                    calcularDiasComprendidos(diasSeleccionados.get(0), diasSeleccionados.get(1));
-                }
-                else
-                {
-                    calcularDiasComprendidos(diasSeleccionados.get(1), diasSeleccionados.get(0));
+                if (miMemoria.disponibleEscritura()) {
+                    miFichero = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "diasLectivos.txt");
+                    miFichero.delete();
+                    mcvCalendario.clearSelection();
+                    if (diasSeleccionados.get(0).before(diasSeleccionados.get(1))) {
+                        calcularDiasComprendidos(diasSeleccionados.get(0), diasSeleccionados.get(1));
+                    } else {
+                        calcularDiasComprendidos(diasSeleccionados.get(1), diasSeleccionados.get(0));
 
+                    }
+                    Toast.makeText(Ejercicio3Activity.this, "Los dias lectivos se han guardado con exito", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(Ejercicio3Activity.this, "La escritura en la tarjeta externa no esta disponible", Toast.LENGTH_SHORT).show();
                 }
-                Toast.makeText(Ejercicio3Activity.this, "Los dias lectivos se han guardado con exito", Toast.LENGTH_SHORT).show();
             }
 
             else{
