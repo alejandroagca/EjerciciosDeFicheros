@@ -133,12 +133,12 @@ public class Ejercicio3Activity extends AppCompatActivity implements View.OnClic
             if (festivo == false){
                 guardarEnExterna(diasComprendidos.get(i).getTime());
                 if (i == 0){
-                    txvEsLectivo.setText("El día " + formato.format(diasComprendidos.get(i)) + " es lectivo");
+                    txvEsLectivo.setText("El día " + formato.format(diasComprendidos.get(i).getTime()) + " es lectivo");
                 }
             }
             else {
                 if (i == 0){
-                    txvEsLectivo.setText("El día " + formato.format(diasComprendidos.get(i)) + " no es lectivo");
+                    txvEsLectivo.setText("El día " + formato.format(diasComprendidos.get(i).getTime()) + " no es lectivo");
                 }
             }
         }
@@ -147,12 +147,8 @@ public class Ejercicio3Activity extends AppCompatActivity implements View.OnClic
 
     public void guardarEnExterna(Date fecha){
         String laFecha = formato.format(fecha);
-            if(miMemoria.disponibleEscritura()) {
-                        miMemoria.escribirExterna("diasLectivos.txt",laFecha , true, "UTF-8");
-            }
-            else{
-                Toast.makeText(Ejercicio3Activity.this, "La escritura no está disponible", Toast.LENGTH_SHORT).show();
-            }
+        miMemoria.escribirExterna("diasLectivos.txt",laFecha , true, "UTF-8");
+
     }
 
 
