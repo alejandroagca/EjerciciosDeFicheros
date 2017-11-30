@@ -1,7 +1,6 @@
 package com.example.usuario.ejerciciosdered;
 
 import android.os.Environment;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,7 +19,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 import static com.prolificinteractive.materialcalendarview.MaterialCalendarView.SELECTION_MODE_MULTIPLE;
 
@@ -112,10 +110,10 @@ public class Ejercicio3Activity extends AppCompatActivity implements View.OnClic
             diaInicio.add(Calendar.DAY_OF_YEAR,1);
         }
 
-        esLectivo();
+        sonLectivos();
     }
 
-    public void esLectivo() {
+    public void sonLectivos() {
         boolean festivo;
         Calendar diaFestivo = Calendar.getInstance();
 
