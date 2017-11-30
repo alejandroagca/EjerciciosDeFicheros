@@ -27,10 +27,10 @@ import static com.prolificinteractive.materialcalendarview.MaterialCalendarView.
 public class Ejercicio3Activity extends AppCompatActivity implements View.OnClickListener{
 
     MaterialCalendarView mcvCalendario;
-    ArrayList<Date> diasSeleccionados;
+    ArrayList<Calendar> diasSeleccionados;
     Button btnCalcularDiasLectivos;
     TextView txvEsLectivo;
-    ArrayList<Date> diasComprendidos;
+    ArrayList<Calendar> diasComprendidos;
     ArrayList<Date> diasFestivos;
     Memoria miMemoria;
     File miFichero;
@@ -41,8 +41,8 @@ public class Ejercicio3Activity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_ejercicio3);
         miMemoria = new Memoria(getApplicationContext());
         diasFestivos = new ArrayList<Date>();
-        diasSeleccionados = new ArrayList<Date>();
-        diasComprendidos = new ArrayList<Date>();
+        diasSeleccionados = new ArrayList<Calendar>();
+        diasComprendidos = new ArrayList<Calendar>();
 
         formato = new SimpleDateFormat("dd-MM-yyyy");
 
@@ -70,7 +70,7 @@ public class Ejercicio3Activity extends AppCompatActivity implements View.OnClic
                     diasSeleccionados.clear();
                 }
                 else{
-                    diasSeleccionados.add(date.getDate());
+                    diasSeleccionados.add(date.getCalendar());
                 }
             }
 
@@ -85,7 +85,6 @@ public class Ejercicio3Activity extends AppCompatActivity implements View.OnClic
                 if (miMemoria.disponibleEscritura()) {
                     miFichero = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "diasLectivos.txt");
                     miFichero.delete();
-                    mcvCalendario.clearSelection();
                     if (diasSeleccionados.get(0).before(diasSeleccionados.get(1))) {
                         calcularDiasComprendidos(diasSeleccionados.get(0), diasSeleccionados.get(1));
                     } else {
@@ -101,52 +100,40 @@ public class Ejercicio3Activity extends AppCompatActivity implements View.OnClic
             else{
                 Toast.makeText(Ejercicio3Activity.this, "Tienes que seleccionar dos dias", Toast.LENGTH_SHORT).show();
             }
-            diasSeleccionados.clear();
         }
+        diasSeleccionados.clear();
+        mcvCalendario.clearSelection();
     }
 
-    public void calcularDiasComprendidos(Date diaInicio, Date diaFin){
+    public void calcularDiasComprendidos(Calendar diaInicio, Calendar diaFin){
 
-        Calendar diaComprendido = Calendar.getInstance();
-        Calendar ultimoDiaComprendido = Calendar.getInstance();
-
-        Date fechaDiaComprendido = diaInicio;
-
-        diaComprendido.setTime(fechaDiaComprendido);
-        ultimoDiaComprendido.setTime(diaFin);
-
-        while (diaComprendido.compareTo(ultimoDiaComprendido) <= 0){
-            diasComprendidos.add(fechaDiaComprendido);
-            diaComprendido.add(Calendar.DAY_OF_YEAR,1);
-            fechaDiaComprendido = diaComprendido.getTime();
+        while (diaInicio.compareTo(diaFin) <= 0){
+            diasComprendidos.add(diaInicio);
+            diaInicio.add(Calendar.DAY_OF_YEAR,1);
         }
 
         esLectivo();
     }
 
     public void esLectivo() {
-
-
         boolean festivo;
-        Calendar diaDeLaSemana = Calendar.getInstance();
         Calendar diaFestivo = Calendar.getInstance();
 
         for (int i = 0; i < diasComprendidos.size(); i++) {
             festivo = false;
-            diaDeLaSemana.setTime(diasComprendidos.get(i));
-            if ((diaDeLaSemana.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) || (diaDeLaSemana.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY)){
+            if ((diasComprendidos.get(i).get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) || (diasComprendidos.get(i).get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY)){
                 festivo = true;
             }
             else{
                 for (int j = 0; j < diasFestivos.size(); j++){
                     diaFestivo.setTime(diasFestivos.get(j));
-                    if(diaDeLaSemana.get(Calendar.DAY_OF_YEAR) == diaFestivo.get(Calendar.DAY_OF_YEAR) ){
+                    if(diasComprendidos.get(i).get(Calendar.DAY_OF_YEAR) == diaFestivo.get(Calendar.DAY_OF_YEAR) ){
                         festivo = true;
                     }
                 }
             }
             if (festivo == false){
-                guardarEnExterna(diasComprendidos.get(i));
+                guardarEnExterna(diasComprendidos.get(i).getTime());
                 if (i == 0){
                     txvEsLectivo.setText("El día " + formato.format(diasComprendidos.get(i)) + " es lectivo");
                 }
@@ -162,7 +149,6 @@ public class Ejercicio3Activity extends AppCompatActivity implements View.OnClic
 
     public void guardarEnExterna(Date fecha){
         String laFecha = formato.format(fecha);
-
             if(miMemoria.disponibleEscritura()) {
                         miMemoria.escribirExterna("diasLectivos.txt",laFecha , true, "UTF-8");
             }

@@ -103,6 +103,8 @@ public class Ejercicio2Activity extends AppCompatActivity implements View.OnClic
             else {
                 Toast.makeText(Ejercicio2Activity.this, "Ya tienes 5 alarmas creadas", Toast.LENGTH_SHORT).show();
             }
+        }else{
+            Toast.makeText(Ejercicio2Activity.this, "No está disponible la escritura en la tarjeta externa", Toast.LENGTH_SHORT).show();
         }
     }
 
