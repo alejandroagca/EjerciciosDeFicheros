@@ -81,24 +81,27 @@ public class Ejercicio3Activity extends AppCompatActivity implements View.OnClic
     @Override
     public void onClick(View v) {
         if (v == btnCalcularDiasLectivos) {
-            if (diasSeleccionados.size() == 2) {
-                miFichero.delete();
-                mcvCalendario.clearSelection();
-                if (diasSeleccionados.get(0).before(diasSeleccionados.get(1))) {
-                    calcularDiasComprendidos(diasSeleccionados.get(0), diasSeleccionados.get(1));
-                }
-                else
-                {
-                    calcularDiasComprendidos(diasSeleccionados.get(1), diasSeleccionados.get(0));
 
+            if (diasSeleccionados.size() == 2) {
+                if (miMemoria.disponibleEscritura()) {
+                    miFichero.delete();
+                    mcvCalendario.clearSelection();
+                    if (diasSeleccionados.get(0).before(diasSeleccionados.get(1))) {
+                        calcularDiasComprendidos(diasSeleccionados.get(0), diasSeleccionados.get(1));
+                    } else {
+                        calcularDiasComprendidos(diasSeleccionados.get(1), diasSeleccionados.get(0));
+
+                    }
+                    Toast.makeText(Ejercicio3Activity.this, "Los dias lectivos se han guardado con exito", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(Ejercicio3Activity.this, "La escritura en la memoria externa no está disponible", Toast.LENGTH_SHORT).show();
                 }
-                Toast.makeText(Ejercicio3Activity.this, "Los dias lectivos se han guardado con exito", Toast.LENGTH_SHORT).show();
             }
 
             else{
-                Toast.makeText(Ejercicio3Activity.this, "Tienes que seleccionar dos dias", Toast.LENGTH_SHORT).show();
-            }
-            diasSeleccionados.clear();
+                    Toast.makeText(Ejercicio3Activity.this, "Tienes que seleccionar dos dias", Toast.LENGTH_SHORT).show();
+                }
+                diasSeleccionados.clear();
         }
     }
 
