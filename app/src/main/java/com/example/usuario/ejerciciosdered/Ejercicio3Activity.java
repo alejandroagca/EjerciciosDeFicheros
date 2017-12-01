@@ -1,6 +1,7 @@
 package com.example.usuario.ejerciciosdered;
 
 import android.os.Environment;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,30 +20,31 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import static com.prolificinteractive.materialcalendarview.MaterialCalendarView.SELECTION_MODE_MULTIPLE;
 
 public class Ejercicio3Activity extends AppCompatActivity implements View.OnClickListener{
 
     MaterialCalendarView mcvCalendario;
-    ArrayList<Calendar> diasSeleccionados;
+    ArrayList<Date> diasSeleccionados;
     Button btnCalcularDiasLectivos;
     TextView txvEsLectivo;
-    ArrayList<Calendar> diasComprendidos;
+    ArrayList<Date> diasComprendidos;
     ArrayList<Date> diasFestivos;
     Memoria miMemoria;
     File miFichero;
-    SimpleDateFormat formato;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ejercicio3);
         miMemoria = new Memoria(getApplicationContext());
         diasFestivos = new ArrayList<Date>();
-        diasSeleccionados = new ArrayList<Calendar>();
-        diasComprendidos = new ArrayList<Calendar>();
+        diasSeleccionados = new ArrayList<Date>();
+        diasComprendidos = new ArrayList<Date>();
 
-        formato = new SimpleDateFormat("dd-MM-yyyy");
+        miFichero = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),  "diasLectivos.txt");
+        miFichero.delete();
 
         anadirDiasFestivos();
 
@@ -68,7 +70,7 @@ public class Ejercicio3Activity extends AppCompatActivity implements View.OnClic
                     diasSeleccionados.clear();
                 }
                 else{
-                    diasSeleccionados.add(date.getCalendar());
+                    diasSeleccionados.add(date.getDate());
                 }
             }
 
@@ -80,65 +82,76 @@ public class Ejercicio3Activity extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         if (v == btnCalcularDiasLectivos) {
             if (diasSeleccionados.size() == 2) {
-                if (miMemoria.disponibleEscritura()) {
-                    miFichero = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "diasLectivos.txt");
-                    miFichero.delete();
-                    if (diasSeleccionados.get(0).before(diasSeleccionados.get(1))) {
-                        calcularDiasComprendidos(diasSeleccionados.get(0), diasSeleccionados.get(1));
-                    } else {
-                        calcularDiasComprendidos(diasSeleccionados.get(1), diasSeleccionados.get(0));
-
-                    }
-                    Toast.makeText(Ejercicio3Activity.this, "Los dias lectivos se han guardado con exito", Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(Ejercicio3Activity.this, "La escritura en la tarjeta externa no esta disponible", Toast.LENGTH_SHORT).show();
+                miFichero.delete();
+                mcvCalendario.clearSelection();
+                if (diasSeleccionados.get(0).before(diasSeleccionados.get(1))) {
+                    calcularDiasComprendidos(diasSeleccionados.get(0), diasSeleccionados.get(1));
                 }
+                else
+                {
+                    calcularDiasComprendidos(diasSeleccionados.get(1), diasSeleccionados.get(0));
+
+                }
+                Toast.makeText(Ejercicio3Activity.this, "Los dias lectivos se han guardado con exito", Toast.LENGTH_SHORT).show();
             }
 
             else{
                 Toast.makeText(Ejercicio3Activity.this, "Tienes que seleccionar dos dias", Toast.LENGTH_SHORT).show();
             }
+            diasSeleccionados.clear();
         }
-        diasSeleccionados.clear();
-        mcvCalendario.clearSelection();
     }
 
-    public void calcularDiasComprendidos(Calendar diaInicio, Calendar diaFin){
+    public void calcularDiasComprendidos(Date diaInicio, Date diaFin){
 
-        while (diaInicio.compareTo(diaFin) <= 0){
-            diasComprendidos.add(diaInicio);
-            diaInicio.add(Calendar.DAY_OF_YEAR,1);
+        Calendar diaComprendido = Calendar.getInstance();
+        Calendar ultimoDiaComprendido = Calendar.getInstance();
+
+        Date fechaDiaComprendido = diaInicio;
+
+        diaComprendido.setTime(fechaDiaComprendido);
+        ultimoDiaComprendido.setTime(diaFin);
+
+        while (diaComprendido.compareTo(ultimoDiaComprendido) <= 0){
+            diasComprendidos.add(fechaDiaComprendido);
+            diaComprendido.add(Calendar.DAY_OF_YEAR,1);
+            fechaDiaComprendido = diaComprendido.getTime();
         }
 
-        sonLectivos();
+        esLectivo();
     }
 
-    public void sonLectivos() {
+    public void esLectivo() {
+
+        SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
+
         boolean festivo;
+        Calendar diaDeLaSemana = Calendar.getInstance();
         Calendar diaFestivo = Calendar.getInstance();
 
         for (int i = 0; i < diasComprendidos.size(); i++) {
             festivo = false;
-            if ((diasComprendidos.get(i).get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) || (diasComprendidos.get(i).get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY)){
+            diaDeLaSemana.setTime(diasComprendidos.get(i));
+            if ((diaDeLaSemana.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) || (diaDeLaSemana.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY)){
                 festivo = true;
             }
             else{
                 for (int j = 0; j < diasFestivos.size(); j++){
                     diaFestivo.setTime(diasFestivos.get(j));
-                    if(diasComprendidos.get(i).get(Calendar.DAY_OF_YEAR) == diaFestivo.get(Calendar.DAY_OF_YEAR) ){
+                    if(diaDeLaSemana.get(Calendar.DAY_OF_YEAR) == diaFestivo.get(Calendar.DAY_OF_YEAR) ){
                         festivo = true;
                     }
                 }
             }
             if (festivo == false){
-                guardarEnExterna(diasComprendidos.get(i).getTime());
+                guardarEnExterna(diasComprendidos.get(i));
                 if (i == 0){
-                    txvEsLectivo.setText("El día " + formato.format(diasComprendidos.get(i).getTime()) + " es lectivo");
+                    txvEsLectivo.setText("El día " + formato.format(diasComprendidos.get(i)) + " es lectivo");
                 }
             }
             else {
                 if (i == 0){
-                    txvEsLectivo.setText("El día " + formato.format(diasComprendidos.get(i).getTime()) + " no es lectivo");
+                    txvEsLectivo.setText("El día " + formato.format(diasComprendidos.get(i)) + " no es lectivo");
                 }
             }
         }
@@ -146,14 +159,21 @@ public class Ejercicio3Activity extends AppCompatActivity implements View.OnClic
     }
 
     public void guardarEnExterna(Date fecha){
+        SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
         String laFecha = formato.format(fecha);
-        miMemoria.escribirExterna("diasLectivos.txt",laFecha , true, "UTF-8");
 
+        if(miMemoria.disponibleEscritura()) {
+            miMemoria.escribirExterna("diasLectivos.txt",laFecha , true, "UTF-8");
+        }
+        else{
+            Toast.makeText(Ejercicio3Activity.this, "La escritura no está disponible", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
 
     public void anadirDiasFestivos(){
+        SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
 
         try{
             diasFestivos.add(formato.parse("12-10-2017"));
